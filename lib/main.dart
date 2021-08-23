@@ -1,8 +1,7 @@
 import 'dart:convert';
-
-import 'package:networking/model/post.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:networking/data.dart';
 
 main() => runApp(MyApp());
 
@@ -21,27 +20,28 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Future<Post> futurePost;
+  Future<Data> futureData;
+
   @override
   void initState() {
     super.initState();
-    futurePost = getPostById();
+    futureData = getUserById();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Netowrking HTTP Lesson 1'),
+        title: Text('Netowrking'),
       ),
       body: Center(
-        child: FutureBuilder<Post>(
-          future: futurePost,
+        child: FutureBuilder<Data>(
+          future: futureData,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text(snapshot.data.title);
+              return Text(snapshot.data.email ?? 'default value');
             } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
+              return Text('${snapshot.error}');
             }
             return CircularProgressIndicator();
           },
@@ -50,15 +50,15 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future<Post> getPostById() async {
+  Future<Data> getUserById() async {
     http.Response postResponse =
-        await http.get('https://jsonplaceholder.typicode.com/posts/1');
+        await http.get('https://reqres.in/api/users/2');
     if (postResponse.statusCode == 200) {
       //success you can get the value
-      //print(postResponse.body);
-      return Post.fromJson(json.decode(postResponse.body));
+      print(postResponse.body);
+      return Data.fromJson(json.decode(postResponse.body));
     } else {
-      throw Exception('Cant not load this post');
+      throw Exception('Cant not load ');
     }
   }
 }
