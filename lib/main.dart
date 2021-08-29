@@ -56,7 +56,7 @@ class _HomeState extends State<Home> {
     if (postResponse.statusCode == 200) {
       //success you can get the value
       print(postResponse.body);
-      return Data.fromJson(json.decode(postResponse.body));
+      return Data.fromJson(json.decode(postResponse.body)['data']);
     } else {
       throw Exception('Cant not load ');
     }
